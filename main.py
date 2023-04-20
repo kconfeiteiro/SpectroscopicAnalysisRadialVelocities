@@ -1,17 +1,13 @@
-import astropy, os
 from scipy.signal import savgol_filter
 import matplotlib.pyplot as plt
-from specutils import Spectrum1D
 from astropy.io import fits
 from astropy.wcs import WCS
 import astropy.units as u
-import pandas as pd
-import numpy as np
-import astropy.units as u
+import os
 import numpy as np
 
 '''
-Links
+Links (sources)
 -----
 1. https://astronomy.stackexchange.com/questions/43552/working-with-stellar-spectra-in-fits-format-in-python
 
@@ -45,8 +41,8 @@ class AnalyzeSpectra:
 
         return self.wavelength, self.flux
     
-    def smooth_signal(self, y, box_points):
-        return np.convolve(y, np.ones(box_points)/box_points, mode='same')
+    def smooth_signal(self, y):
+        return np.linalg.svd(y, full_matrices=False)
     
     def flatten_list(self, x):
         return [item for subl in x for item in subl]
@@ -59,8 +55,9 @@ class AnalyzeSpectra:
             self.x[i] = x1
             self.y[i] = y1
 
-        self.y_unsmoothed = self.y
         self.x, self.y = self.flatten_list(self.x), self.flatten_list(self.y)
+        _, self.y, _ = self.smooth_signal([self.y])
+
 
         if save:
             return self.x, self.y
@@ -69,7 +66,7 @@ class AnalyzeSpectra:
         if title is None: title = self.title
         if X is not None: X, y = self.wavelength, self.flux
 
-        plt.plot(X[0:-1:10], y[0:-1:10])
+        plt.plot(X, y)
         plt.xlabel(x_title)
         plt.ylabel(y_title)
         plt.title(title)
