@@ -33,3 +33,6 @@ Our main objective is to fit a periodic curve to shifting absorption lines (like
 ### Code Contributers
 
 * Krystian Confeiteiro
+
+### Observations 
+* All completed by John Saier
