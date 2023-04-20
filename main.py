@@ -1,12 +1,14 @@
-from astropy.constants.si import c, G, M_sun, R_sun
-from iteration_utilities import deepflatten
+import astropy, os
+from scipy.signal import savgol_filter
 import matplotlib.pyplot as plt
+from specutils import Spectrum1D
 from astropy.io import fits
 from astropy.wcs import WCS
 import astropy.units as u
 import pandas as pd
 import numpy as np
-import astropy, os
+import astropy.units as u
+import numpy as np
 
 '''
 Links
@@ -15,27 +17,11 @@ Links
 
 '''
 
-# root = 'DATA/HD12871704_15_23_850_-1_20230415T064551/'
-# hdul = fits.open(root + 'HD12871704_15_23_850_20230415064551_47.fit')
-# data = hdul[0].data
-# h1 = hdul[0].header
-# obj_name = h1.get('OBJECT', 'Unknown')
-
-# print(data)
-# flux = data
-# w = WCS(h1, naxis=1, relax=False, fix=False)
-# lam = w.wcs_pix2world(np.arange(len(flux)), 0)[0]
-
-# plt.plot(lam, flux)
-# plt.xlabel('Wavelength (Angstrom)')
-# plt.ylabel('Normalized flux')
-
 class AnalyzeSpectra:
 
     def __init__(self, path):
         self.path = path
-
-        self.directory = sorted(os.listdir(self.path))
+        self.directory = os.listdir(self.path)
 
         if '.fit' in self.path: 
             self.filename = self.path.split('/')[-1].replace('.fit','')
@@ -44,12 +30,9 @@ class AnalyzeSpectra:
         else:
             self.target = self.directory[0].split('/')[-1].replace('.fit','').split('_')[0]
             self.title = 'Partial Spectra of ' + self.target
-    
-    def read_single_file(self, file=None):
-        if file is None:
-            file = self.path
 
-        print(file)
+    def read_signal(self, file=None):
+        if file is None: file = self.path
         sp = fits.open(file)
         header = sp[0].header
 
@@ -62,32 +45,35 @@ class AnalyzeSpectra:
 
         return self.wavelength, self.flux
     
+    def smooth_signal(self, y, box_points):
+        return np.convolve(y, np.ones(box_points)/box_points, mode='same')
+    
     def flatten_list(self, x):
-        return list(deepflatten(x))
+        return [item for subl in x for item in subl]
     
     def create_spectra(self, save=False):
         self.x, self.y = [0]*len(self.directory), [0]*len(self.directory)
         for i, file in enumerate(self.directory):
             file = os.path.join(self.path, file)
-            x1, y1 = self.read_single_file(file)
+            x1, y1 = self.read_signal(file)
             self.x[i] = x1
             self.y[i] = y1
 
+        self.y_unsmoothed = self.y
+        self.x, self.y = self.flatten_list(self.x), self.flatten_list(self.y)
+
         if save:
-            return self.flatten_list(self.x), self.flatten_list(self.y)
-    
+            return self.x, self.y
+        
     def plot_spectra(self, X=None, y=None, title=None, x_title='Wavelength (Angstroms)', y_title=' Normalized Flux', file='PLOTS/', print=False, save=False):
-        if title is None: 
-            title = self.title
+        if title is None: title = self.title
+        if X is not None: X, y = self.wavelength, self.flux
 
-        if X is not None:
-            X = self.wavelength
-            y = self.flux
-
-        plt.plot(X, y)
+        plt.plot(X[0:-1:10], y[0:-1:10])
         plt.xlabel(x_title)
         plt.ylabel(y_title)
         plt.title(title)
+        plt.tight_layout()
         if save: plt.savefig(file + self.target + '_full_spectra.jpg')
         if print: plt.show()
 
@@ -107,6 +93,3 @@ if __name__ == '__main__':
     path = os.path.join(root, file)
     Data = AnalyzeSpectra(root)
     Data.plot_full_spectra(print=True)
-
-    data1 = Data.read_single_file(path)
-    Data.plot_spectra(*data1, print=True)
