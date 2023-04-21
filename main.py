@@ -1,10 +1,8 @@
-from scipy.signal import savgol_filter
 import matplotlib.pyplot as plt
 from astropy.io import fits
 from astropy.wcs import WCS
-import astropy.units as u
-import os
 import numpy as np
+import os
 
 '''
 Links (sources)
