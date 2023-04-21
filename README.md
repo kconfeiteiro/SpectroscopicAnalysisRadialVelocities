@@ -14,7 +14,7 @@ Importing this package is pretty simple. Follow these steps:
 ##### Code
 
 ```python
-ProjectMain.Package import AnalyzeSpectra
+from ProjectMain.Package import AnalyzeSpectra
 import os
 
 # define root folder and indvidual files you want to plot (separetely)
@@ -23,7 +23,7 @@ root = 'DATA/HD12871704_15_23_850_-1_20230415T064551/'
 path = os.path.join(root, file) # creates a combined path
 
 # initialie class and perform operations
-Data = spec.AnalyzeSpectra(root) # initialize class
+Data = AnalyzeSpectra(root) # initialize class
 Data.plot_full_spectra(print=True) # plots entire combined spectra
 ```
 
