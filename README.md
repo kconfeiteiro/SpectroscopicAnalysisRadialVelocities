@@ -14,7 +14,7 @@ Importing this package is pretty simple. Follow these steps:
 ##### Code
 
 ```python
-from ProjectMain import Package as spec
+ProjectMain.Package import AnalyzeSpectra
 import os
 
 # define root folder and indvidual files you want to plot (separetely)
