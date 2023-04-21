@@ -8,7 +8,7 @@ This code is for the final project for EP 425, Observational Astronomy, for Spri
 
 #### Project Objective
 
-Our main objective is to fit a periodic curve to shifting absorption lines (like Hydrogen and Calcium lines) of the system’s spectra to confirm the presence of exoplanets. We are looking at the star system *HD 128717* from theGAIA DR3 Archival Database. Our target system was observed with Gaia as an exoplanet candidate using photometry.
+Our main objective is to fit a periodic curve to shifting absorption lines (like Hydrogen and Calcium lines) of the system’s spectra then calculate radial velocities to confirm the presence of exoplanets. We are looking at the star system *HD 128717* from theGAIA DR3 Archival Database. Our target system was observed with Gaia as an exoplanet candidate using photometry.
 
 ### Project Team
 
@@ -16,6 +16,11 @@ Our main objective is to fit a periodic curve to shifting absorption lines (like
 * Krystian Confeiteiro
 
 ## Software
+
+### Main Tools
+
+* Demetra (calibration and reduction)
+* Python (analysis)
 
 ### Packages used
 
@@ -36,3 +41,6 @@ Our main objective is to fit a periodic curve to shifting absorption lines (like
 
 ### Observations 
 * All completed by John Saier
+
+### Data Reduction
+* Completed by John Saier using 'Demetra'
