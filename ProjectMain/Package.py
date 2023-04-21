@@ -79,5 +79,5 @@ class AnalyzeSpectra:
 
 class CalculateParamaters(AnalyzeSpectra):
 
-    def __init__(self, parameters:dict):
+    def __init__(self, **parameters):
         self.parameters = parameters
