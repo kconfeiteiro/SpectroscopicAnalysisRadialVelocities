@@ -54,8 +54,6 @@ class AnalyzeSpectra:
             self.y[i] = y1
 
         self.x, self.y = self.flatten_list(self.x), self.flatten_list(self.y)
-        _, self.y, _ = self.smooth_signal([self.y])
-
 
         if save:
             return self.x, self.y
