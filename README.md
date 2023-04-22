@@ -8,7 +8,7 @@ This code is for the final project for EP 425, Observational Astronomy, for Spri
 
 ### Project Objective
 
-Our main objective is to fit a periodic curve to shifting absorption lines (like Hydrogen and Calcium lines) of the system's spectra then calculate radial velocities to confirm the presence of exoplanets. We are looking at the star system *HD 128717* from the GAIA DR3 Archival Database. After getting the change in 
+Our main objective is to fit a periodic curve to shifting absorption lines (like Hydrogen and Calcium lines) of the system's spectra then calculate radial velocities to confirm the presence of exoplanets. We are looking at the star system *HD 128717* from the GAIA DR3 Archival Database. The radial velocity will be calcualted after the change in wavlength, from which we can confirm the existence of the exoplanet surrounding HD 128717.
 
 ### Team
 
