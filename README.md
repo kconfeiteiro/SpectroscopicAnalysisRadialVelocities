@@ -29,7 +29,7 @@ Importing this package is pretty simple. Follow these steps:
 
 ## Issues
 
-If you are having issue pip installing manually, please run the `setup.bat` file by opening up your command prompt and typing `setup.bat`
+If you are having issue pip installing manually, please run the `setup.bat` file by opening up your command prompt and typing `setup.bat` (NOTE: You will need to download this manually and run in in the folder where your main code is located)
 
 ## Example
 
