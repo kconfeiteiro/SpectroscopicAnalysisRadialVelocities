@@ -26,7 +26,7 @@ class ImportSpectra:
     def __init__(self, path:str):
         self.path = path
 
-        if '.fit' in self.path: 
+        if os.path.isfile(path): 
             self.filename = self.path.split('/')[-1].replace('.fit','')
             self.target = self.filename.split('_')[0]
             self.title = self.target + '; Order ' + self.filename.split('_')[-1]
@@ -43,15 +43,12 @@ class ImportSpectra:
         sp = fits.open(file)
         header = sp[0].header
 
-        wcs = WCS(header)
-        index = np.arange(header['NAXIS1'])
         num = header['NAXIS1']
         start_wave=header['CRVAL1']
         wave_step=header['CDELT1']
-        # wavelength = wcs.wcs_pix2world(index[:,np.newaxis], 0)
-        wavelength = np.linspace(start_wave, start_wave + wave_step*num, num)
+        self.wl = np.linspace(start_wave, start_wave + wave_step*num, num)
 
-        self.wavelength = wavelength.flatten()
+        self.wavelength = self.wl.flatten()
         self.flux = sp[0].data
 
         return self.wavelength, self.flux
@@ -71,7 +68,7 @@ class ImportSpectra:
 
 class PlotSpectra(ImportSpectra):
 
-    def __init__(self, path):
+    def __init__(self, path:str):
         super().__init__(path)
 
     def plot_spectra(self, X=None, y=None, title=None, x_title='Wavelength (Angstroms)', y_title='Normalized Flux', file='PLOTS/', print=False, save=False):
@@ -115,15 +112,22 @@ class AnalyzeSpectra(ImportSpectra):
         pdgm.set_ylabel('Normalized Amplitude')
         if show: plt.show()
     
-    def calculate_dlambda(self, df1=None, df2=None, index=None):
+    def calculate_dlambda(self, target_wavelength=None, df1=None, df2=None, index=None):
+        assert len(df1) == len(df2)
+        if target_wavelength is None: target_wavelength = 6560 
+
         calc = lambda x: m.log(x)
-        c1 = list(map(calc, np.array(df1)))
-        c2 = list(map(calc, np.array(df2)))
+        c1, c2 = list(map(calc, np.array(df1))), list(map(calc, np.array(df2)))
         diff = np.subtract(c2, c1)
         if index is None: 
             return diff
         else:
-            new = np.stack((c1, c2), axis=1)
+            target_wavelength = self.target_wavelength
+            self.new = np.stack((self.wl, c1, c2), axis=1)
+            return self.new[target_wavelength,:]
        
-    def calculate_radial_velocity(self, delta_lambda, lam) -> float:
+    def calculate_radial_velocity(self, delta_lambda=None, lam=None):
+        if delta_lambda is None:
+            delta_lambda = self.new[self.target_wavelength,:]
+            lam = 6560
         return const.c*(delta_lambda/lam)
