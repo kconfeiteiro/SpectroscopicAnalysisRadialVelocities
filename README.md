@@ -12,9 +12,9 @@ Our main objective is to fit a periodic curve to shifting absorption lines (like
 
 ### Team
 
-* John Saier
+* John Saier ([LinkedIn](https://www.linkedin.com/in/jonathan-saier/))
   * Observations, data reduction in Demetra
-* Krystian Confeiteiro
+* Krystian Confeiteiro ([LinkedIn](https://www.linkedin.com/in/kconfeiteiro))
   * Data Analysis in Python
 
 # How to to use this package
@@ -75,6 +75,10 @@ Data.plot_full_spectra(print=True) # plots entire combined spectra
 1. Pauli Virtanen, Ralf Gommers, SciPy 1.0 Contributors, et. al. (2020)  SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python .  *Nature Methods* , 17(3), 261-272.
 2. Harris, C.R., Millman, K.J., van der Walt, S.J. et al.  *Array programming with NumPy* . Nature 585, 357–362 (2020). DOI: [10.1038/s41586-020-2649-2](https://doi.org/10.1038/s41586-020-2649-2). ([Publisher link](https://www.nature.com/articles/s41586-020-2649-2)).
 3. J. D. Hunter, "Matplotlib: A 2D Graphics Environment", Computing in Science & Engineering, vol. 9, no. 3, pp. 90-95, 2007 ([Publisher link](https://doi.org/10.1109/MCSE.2007.55)).
+
+## Test Data
+
+I would like to thank Antonion Cascio and Evan Bryson for donating their data to allow me to test the code. 
 
 # Issues
 
