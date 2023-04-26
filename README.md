@@ -75,6 +75,8 @@ Data.plot_full_spectra(print=True) # plots entire combined spectra
 1. Pauli Virtanen, Ralf Gommers, SciPy 1.0 Contributors, et. al. (2020)  SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python .  *Nature Methods* , 17(3), 261-272.
 2. Harris, C.R., Millman, K.J., van der Walt, S.J. et al.  *Array programming with NumPy* . Nature 585, 357–362 (2020). DOI: [10.1038/s41586-020-2649-2](https://doi.org/10.1038/s41586-020-2649-2). ([Publisher link](https://www.nature.com/articles/s41586-020-2649-2)).
 3. J. D. Hunter, "Matplotlib: A 2D Graphics Environment", Computing in Science & Engineering, vol. 9, no. 3, pp. 90-95, 2007 ([Publisher link](https://doi.org/10.1109/MCSE.2007.55)).
+4. Astropy Collaboration, Adrian M. Price-Whelan, Pey Lian Lim, and etl. al. Earl, Astropy Project Contributors. The Astropy Project: Sustaining and Growing a Community-oriented Open-source Project and the
+Latest Major Release (v5.0) of the Core Package. apj, 935(2):167, August 2022
 
 ## Test Data
 
