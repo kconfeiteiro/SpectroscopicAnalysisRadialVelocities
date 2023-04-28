@@ -1,0 +1,32 @@
+# Data = AnalyzeSpectra(root)
+	# Data.plot_full_spectra(print=True)
+
+	# pre = PlotSpectra(path)
+	# xy = pre.read_signal()
+	# xy_smoothed = pre.read_signal(smooth=True)
+
+	# plt.plot(*xy, *xy_smoothed)
+	# plt.title('HD 128717 Spectra; Order 36')
+	# plt.xlabel('Wavelength (Angstroms)')
+	# plt.ylabel('Flux (normalized and smoothed)')
+	# plt.xlim((6250,6300))
+	# plt.legend(['Raw', 'Smoothed'], loc='upper right')
+	# plt.tight_layout()
+	# plt.show()
+
+	# smoothed_full = pre.combine_spectra(smooth=True)
+	# all_smoothed = pre.combine_spectra(smooth=False)
+
+	# figure(figsize=(12,7)
+	# plt.plot(*all_smoothed, *smoothed_full)
+	# plt.title('HD 128717 Full Spectra')
+	# plt.xlabel('Wavelength (Angstroms)')
+	# plt.ylabel('Flux (normalized and smoothed)')
+	# plt.tight_layout()
+	# plt.legend(['Raw', 'Smoothed'], loc='upper right')
+
+	# plt.savefig('PLOTS/SingleOrder/FullSpectraHD128717_smoothed.jpg', dpi=500)
+	# plt.show()
+
+	# PLA = PlotSpectra(root)
+	# PLA.plot_all(directory='PLOTS/HD 128717/', wl_order_range=(31,47))
