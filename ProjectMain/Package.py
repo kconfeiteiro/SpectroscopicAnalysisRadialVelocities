@@ -1,6 +1,5 @@
+from typing import Tuple, List, Sequence #, Dict
 from scipy.signal import savgol_filter
-from typing import Tuple, Dict, List
-from matplotlib.pyplot import figure
 import matplotlib.pyplot as plt
 import scipy.constants as const
 import scipy.signal as signal
@@ -25,30 +24,32 @@ today = now.strftime('%Y_%m_%d')
 
 class ImportSpectra:
 
-	def __init__(self, path:str, filetype:str='.fit', pattern:str='[A-Za-z]+.[0-9]{5}', smooth_all=False, target:str=None, order:int=None):
-		find = lambda ptn, txt: re.findall(ptn, txt)[0]
-		ID = lambda x: re.findall('[A-Za-z]+', x)[0] + ' ' + re.findall('[0-9]+', x)[0]
-		ffolder = lambda path: os.path.join(*path.split('/')[:2])
+	def __init__(self, path:str, filetype:str='.fit', smooth_all=False, target:str=None, order:int=None): # FIXME - reorganzie this constructor
+		find_folder = lambda path: os.path.join(*path.split('/')[:2])
 		self.smooth_all = smooth_all
-		self.pattern = pattern
 		self.filetype = filetype
 		self.target = target
+		self.order = order
 		self.path = path
+		self.pattern = f'_[{self.order}]+' + f'\{self.filetype}'
 
 		if os.path.isfile(self.path):
-			self.order = self.path.split('/')[-1].split('_')[-1].replace('.fit','')
 			self.filename = self.path.split('/')[-1].replace('.fit','')
-			self.title = self.target + '; Order ' + self.order
-			self.folder = ffolder(self.path)
+			self.title = self.target + '; Order ' + str(self.order)
+			self.folder = find_folder(self.path)
 		else:
 			self.directory = os.listdir(self.path)
 			self.num_files = len(self.directory)
 			self.title = 'Spectra of ' + self.target
 
-
 	def flat(self, x) -> List[float]:
 		return [item for subl in x for item in subl]
 	
+	def find_n_lowest(self, array:Sequence, num_of_values:int=1, find_unique=False) -> Sequence[float]:
+		array = sorted(array)
+		if find_unique: array = np.unique(sorted(array))
+		return array[0:num_of_values]
+
 	def smooth_signal(self, y:list, window_size:int=51, poly_order:int=3): 
 		return savgol_filter(y, window_size, poly_order)
 	
@@ -66,7 +67,7 @@ class ImportSpectra:
 
 		return self.wavelength, self.flux
 		
-	def combine_spectra(self, path:str=None, save_xlsx=False, smooth=False) -> Tuple[list, list]:
+	def combine_spectra(self, path:str=None, save_xlsx_as=None, smooth=False) -> Tuple[list, list]:
 		ffolder = lambda path: os.path.join(*path.split('/')[:len(path.split('/') - 1)])
 		if (path is None) or (os.path.isdir(path)): path = self.folder
 		if os.path.isfile(path): path = ffolder(path)
@@ -85,7 +86,7 @@ class ImportSpectra:
 		self.x, self.y = self.data[:,0], self.data[:,1]
 		if smooth or self.smooth_all: self.y = self.smooth_signal(self.y)
 
-		if save_xlsx:
+		if save_xlsx_as:
 			DATA = pd.DataFrame(data=(self.x, self.y), columns=['Wavelength (Angstroms)','Normalized Flux'])
 			DATA.to_excel(self.target.replace(' ','') + '_DATA_' + today)
 
@@ -94,49 +95,58 @@ class ImportSpectra:
 
 class PlotSpectra(ImportSpectra):
 
-	def __init__(self, path:str, save_all=False):
-		super().__init__(path)
+	def __init__(self, path:str, order=None, save_all=False, filetype:str='.fit', target:str=None, **kwargs):
+		super().__init__(path, filetype=filetype, order=order, target=target, **kwargs)
 		self.save_all = save_all
 
-	def plot_spectra(self, X=None, y=None, title=None, xlims:Tuple[float, ...]=None, ylims:tuple=None, 
-		  	x_title:str='Wavelength (Angstroms)', y_title:str='Normalized Flux', directory:str='PLOTS/', 
-			vlines:List[float]=None, vline_colors:List[str]=None, print=True, save=False, save_as:str=None, 
-			figsize:Tuple=(12,7), order:int=None, **kwargs):
+	def plot_spectra(self, X=None, y=None, title=None, xlims:Tuple[float, float]=None, ylims:Tuple[float, float]=None, 
+		  	x_title:str=None, y_title:str=None, directory:str='PLOTS/', vlines:List[float]=None, vline_colors:List[str]=None, 
+			print=True, save=False, save_as:str=None, show_lowest:int=None, order:int=None, annotations:Sequence[str]=None, tight_layout=False, **kwargs):
 		
 		if title is None: title = self.title
 		if X is None: X, y = self.read_signal(self.path)
+		if order is None: order = self.order
 		if not os.path.exists(directory): os.mkdir(directory)
 
 		fig, ax = plt.subplots(**kwargs)
 		ax.plot(X, y)
-		ax.set_title(title if not order else title + f'; Order {order}')
+		ax.set_title(title)
 		ax.set_xlabel(x_title)
 		ax.set_ylabel(y_title)
+		y_limits = ax.get_ylim()
 
 		if xlims: ax.set_xlim(*xlims)
 		if ylims: ax.set_xlim(*ylims)
+
+		if show_lowest: # FIXME - this does not wokr at all! :(
+			limits = super().find_n_lowest(y, show_lowest)
+			for line in limits:
+				ax.axvline(line, y_limits[0], y_limits[1])
+				ax.annotate(str(line), xy=(line + 0.05, max(y_limits)*0.75))
+
 		if vlines:
 			for line in vlines:
 				ax.axvline(line)
 		elif vlines and vline_colors:
-			for line, color in zip(vlines, vline_colors):
+			for line, color, ann in zip(vlines, vline_colors, annotations):
 				ax.axvline(line, color=color)
+				if ann: ax.annotate(ann, xy=(line + 0.05, 5.5), color="green")
 
+		if tight_layout: fig.tight_layout()
 		if os.path.isfile(self.path) and (save or self.save_all): 
-			filename = '{}{}_Order-{}_{}.jpg'.format(directory, self.target.replace(' ',''), self.order, today_time)
-			fig.savefig(filename)
+			fig.savefig('{}{}_Order-{}_{}.jpg'.format(directory, self.target.replace(' ',''), self.order, today_time))
 		elif save_as:
-			fig.savefig(directory + save_as)
+			fig.savefig(os.path.join(directory, save_as))
 
 		if print: plt.show()
 
-	def plot_all(self, wl_order_range:Tuple[int, int], file=None, **kwargs):
+	def plot_all(self, wl_order_range:Tuple[int, int], **kwargs):
 		assert len(self.directory) == range(*wl_order_range), f'Range error between \'Directory\' and \'wl_order_range\' of \'{wl_order_range}\''
 		for item, order in zip(self.directory, range(*wl_order_range)):
-			file2 = os.path.join(self.path, file)
+			file2 = os.path.join(self.path, item)
 			order = item.split('_')[-1].replace('.fit','')
 			data = super().read_signal(file2, smooth=True)
-			self.plot_spectra(*data, save_as=file.split('/')[-1].replace('.fit',''), save=True, print=False, order=order, **kwargs)
+			self.plot_spectra(*data, save_as=item.split('/')[-1].replace('.fit',''), save=True, print=False, order=order, **kwargs)
 
 	def plot_full_spectra(self, data:Tuple[list, list]=None, auto=True, **kwargs):
 		if auto: data = self.combine_spectra()
@@ -149,26 +159,21 @@ class CompareSpectra(ImportSpectra):
 	
 	def parse_folders(self, path: str or List = None) -> List[str]:
 		if path is None: path = self.path
-		if not os.path.isdir(path):
-			raise NotADirectoryError(path + ' is not a directory')
-		elif type(self.path) == list and path is None: 
-			self.ALL = []
-			for folder in path:
-				for root, _, files in os.walk(folder):
-					for file in files: self.ALL.append(os.path.join(root, file))
+		if type(self.path) == list: 
+			self.ALL = [os.path.join(root, file) for folder in path for root, _, files in os.walk(folder) for file in files]
 			return self.ALL
 		else:
-			self.ALL = []
-			for root, _, files in os.walk(path):
-				for file in files: self.ALL.append(os.path.join(root, file))
-
+			self.ALL = [os.path.join(root, file) for root, _, files in os.walk(path) for file in files]
 			return self.ALL
 		
 	def find_orders(self, order:int, filetype:str=None):
 		ID = lambda x: re.findall(f'_[{order}]+' + f'\{self.filetype}' if filetype is None else f'_[{order}]+' + f'\{self.filetype}', x)
 		return [file for file in os.listdir(self.path) if ID(file)]
 	
-	def plot_comparison(self, x_label=None, y_label=None, files:List=None, save_as=None, xlims=None, ylims=None, vlines=None, vline_colors=None, show=False, **kwargs):
+	def plot_comparison(
+			self, x_label=None, y_label=None, files:List=None, save_as=None, xlims=None, ylims=None, 
+			vlines=None, vline_colors=None, show=False, **kwargs):
+		
 		if files is None:
 			fig, ax = plt.subplots(**kwargs)
 			for file in self.ALL:
@@ -205,8 +210,8 @@ class AnalyzeSpectra(ImportSpectra):
 		self.PDGM = signal.lombscargle(X, y, setup[-1], **kwargs)
 		return self.PDGM, self.w
 	
-	def show_periodogram(self, show=True, save=False, **kwargs):
-		fig, (og, pdgm) = plt.subplots(2, 1, constrained_layout=True, **kwargs)
+	def show_periodogram(self, show=True, save=False, orders=(2, 1), **kwargs):
+		fig, (og, pdgm) = plt.subplots(*orders, constrained_layout=True, **kwargs)
 
 		og.plot(self.wavelength, self.flux)
 		og.set_xlabel('Time [s]')
@@ -219,21 +224,21 @@ class AnalyzeSpectra(ImportSpectra):
 		if save or self.save_all: fig.savefig(self.target.replace(' ','') + '_PeriodogramAnalysis_' + today_time)
 		if show: plt.show()
 	
-	def calculate_dlambda(self, target_wavelength: float or int = None, df1:list=None, df2: list = None, index: float or int = None):
+	def calculate_dlambda(self, target_wavelength: float or int = None, df1:List=None, df2:List = None, index: float or int = None):
 		if target_wavelength is None: target_wavelength = self.target_wavelength
 		assert len(df1) == len(df2)
 
 		calc = lambda x: m.log(x)
-		c1, c2 = list(map(calc, df1)), list(map(calc, df2))
-		diff = np.subtract(c2, c1)
+		first_night, second_night = list(map(calc, df1)), list(map(calc, df2))
+		diff = np.subtract(second_night, first_night)
 		diff = np.stack((self.w))
 
 		if index is None: 
 			return diff
 		else:
-			self.new = np.stack((self.wl, c1, c2), axis=1)
+			self.new = np.stack((self.wl, first_night, second_night), axis=1)
 			return self.new[self.target_wavelength,:]
 	   
-	def calculate_radial_velocity(self, delta_lambda=None, lam=6563):
+	def calculate_radial_velocity(self, delta_lambda:float=None, lam:float=6563):
 		if delta_lambda is None: delta_lambda = self.new[self.target_wavelength,:]
 		return const.c*(delta_lambda/lam)
