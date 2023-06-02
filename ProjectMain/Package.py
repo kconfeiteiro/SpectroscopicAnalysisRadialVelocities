@@ -50,8 +50,8 @@ class ImportSpectra:
 		if find_unique: array = np.unique(sorted(array))
 		return array[0:num_of_values]
 
-	def smooth_signal(self, y:list, window_size:int=51, poly_order:int=3): 
-		return savgol_filter(y, window_size, poly_order)
+	def smooth_signal(self, y:list, window_size:int=51, poly_order:int=3, **kwargs): 
+		return savgol_filter(y, window_size, poly_order, **kwargs)
 	
 	def read_signal(self, file:str=None, smooth=False) -> Tuple[list, list]:
 		if file is None: file = self.path
@@ -69,8 +69,10 @@ class ImportSpectra:
 		
 	def combine_spectra(self, path:str=None, save_xlsx_as=None, smooth=False) -> Tuple[list, list]:
 		ffolder = lambda path: os.path.join(*path.split('/')[:len(path.split('/') - 1)])
-		if (path is None) or (os.path.isdir(path)): path = self.folder
-		if os.path.isfile(path): path = ffolder(path)
+		if (path is None) or (os.path.isdir(path)): 
+			path = self.path
+		elif os.path.isfile(path): 
+			path = ffolder(path)
 
 		assert os.path.isdir(path), f'Path is not a directory. Could not parse \'{path}\''
 		self.x, self.y = [0]*len(os.listdir(path)), [0]*len(os.listdir(path))
@@ -104,7 +106,7 @@ class PlotSpectra(ImportSpectra):
 			print=True, save=False, save_as:str=None, show_lowest:int=None, order:int=None, annotations:Sequence[str]=None, tight_layout=False, **kwargs):
 		
 		if title is None: title = self.title
-		if X is None: X, y = self.read_signal(self.path)
+		if (X is None) and os.path.isfile(self.path): X, y = self.read_signal(self.path)
 		if order is None: order = self.order
 		if not os.path.exists(directory): os.mkdir(directory)
 
