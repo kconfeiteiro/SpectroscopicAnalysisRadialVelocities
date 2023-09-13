@@ -2,28 +2,26 @@
 
 ## Project Details
 
-### Purpose
-
 This code is for the final project for Observational Astronomy (EP-425) for the Spring 2023 semester, at *Embry-Riddle Aeronautical University*.
 
-### Objective
+## Project Objective
 
 Our main objective is to fit a periodic curve to shifting absorption lines (like Hydrogen and Calcium lines) of the system's spectra and then calculate radial velocities to confirm the presence of exoplanets. We are looking at the star system *HD 128717* from the [GAIA DR3 Archival Database](https://www.cosmos.esa.int/web/gaia/dr3). The radial velocity will be calculated after the change in wavelength, from which we can confirm the existence of the exoplanet surrounding HD 128717.
 
 ### Team
 
 * [John Saier](https://www.linkedin.com/in/jonathan-saier/)
-  * Observations, data reduction in Demetra
+  * Observations and data reduction using Demetra
 * [Krystian Confeiteiro](https://www.linkedin.com/in/kconfeiteiro)
-  * Data Analysis in Python
+  * Data analysis in Python
 
 # How To Use The Code
 
-## Import
+## Imports
 
 Importing this package is pretty simple. Follow these steps:
 
-1. Import entire code using `git clone https://github.com/kconfeiteiro/SpectroscopicAnalysisRadialVelocities`
+1. Import the entire code using `git clone https://github.com/kconfeiteiro/SpectroscopicAnalysisRadialVelocities`
 2. To `pip install`, use:
     - Push
 4. Now, you need to import the functions to read, plot, and make the calculations. For that, use `from ProjectMain.Package import AnalyzeSpectra`
