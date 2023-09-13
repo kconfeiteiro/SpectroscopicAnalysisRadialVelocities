@@ -12,19 +12,21 @@ Our main objective is to fit a periodic curve to shifting absorption lines (like
 
 ### Team
 
-* John Saier ([LinkedIn](https://www.linkedin.com/in/jonathan-saier/))
+* [John Saier](https://www.linkedin.com/in/jonathan-saier/)
   * Observations, data reduction in Demetra
-* Krystian Confeiteiro ([LinkedIn](https://www.linkedin.com/in/kconfeiteiro))
+* [Krystian Confeiteiro](https://www.linkedin.com/in/kconfeiteiro)
   * Data Analysis in Python
 
-# How to to use this package
+# How To Use The Code
 
 ## Import
 
 Importing this package is pretty simple. Follow these steps:
 
-1. Import entire code using `pip install git+https://github.com/[kconfeiteiro]/[EP-425-Final-Project-Code]@[main]`
-2. Now, you need to import the functions to read, plot, and make the calculations. For that, use `from ProjectMain.Package import AnalyzeSpectra`
+1. Import entire code using `git clone https://github.com/kconfeiteiro/EP-425-Final-Project-Code`
+2. To `pip install`, use:
+    - Push
+4. Now, you need to import the functions to read, plot, and make the calculations. For that, use `from ProjectMain.Package import AnalyzeSpectra`
    * For other functions, you will follow the same for importing and calling them.
 
 ## Issues
