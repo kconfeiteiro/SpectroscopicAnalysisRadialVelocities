@@ -1,10 +1,12 @@
 # Spectroscopic Analysis for Determining Radial Velocities
 
-## Project Details
+## Project Details & Objectives
+
+### Details
 
 This code is for the final project for Observational Astronomy (EP-425) for the Spring 2023 semester, at *Embry-Riddle Aeronautical University*.
 
-## Project Objective
+### Objectives
 
 Our main objective is to fit a periodic curve to shifting absorption lines (like Hydrogen and Calcium lines) of the system's spectra and then calculate radial velocities to confirm the presence of exoplanets. We are looking at the star system *HD 128717* from the [GAIA DR3 Archival Database](https://www.cosmos.esa.int/web/gaia/dr3). The radial velocity will be calculated after the change in wavelength, from which we can confirm the existence of the exoplanet surrounding HD 128717.
 
