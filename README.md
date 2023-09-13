@@ -1,14 +1,14 @@
-# Observational Astronomy (EP425) Final Project
+# Spectroscopic Analysis for Determining Radial Velocities
 
 ## Project Details
 
 ### Purpose
 
-This code is for the final project for EP 425, Observational Astronomy, for Spring 2023 at *Embry-Riddle Aeronautical University*.
+This code is for the final project for Observational Astronomy (EP-425) for the Spring 2023 semester, at *Embry-Riddle Aeronautical University*.
 
 ### Objective
 
-Our main objective is to fit a periodic curve to shifting absorption lines (like Hydrogen and Calcium lines) of the system's spectra then calculate radial velocities to confirm the presence of exoplanets. We are looking at the star system *HD 128717* from the GAIA DR3 Archival Database. The radial velocity will be calculated after the change in wavelength, from which we can confirm the existence of the exoplanet surrounding HD 128717.
+Our main objective is to fit a periodic curve to shifting absorption lines (like Hydrogen and Calcium lines) of the system's spectra and then calculate radial velocities to confirm the presence of exoplanets. We are looking at the star system *HD 128717* from the [GAIA DR3 Archival Database](https://www.cosmos.esa.int/web/gaia/dr3). The radial velocity will be calculated after the change in wavelength, from which we can confirm the existence of the exoplanet surrounding HD 128717.
 
 ### Team
 
@@ -23,7 +23,7 @@ Our main objective is to fit a periodic curve to shifting absorption lines (like
 
 Importing this package is pretty simple. Follow these steps:
 
-1. Import entire code using `git clone https://github.com/kconfeiteiro/EP-425-Final-Project-Code`
+1. Import entire code using `git clone https://github.com/kconfeiteiro/SpectroscopicAnalysisRadialVelocities`
 2. To `pip install`, use:
     - Push
 4. Now, you need to import the functions to read, plot, and make the calculations. For that, use `from ProjectMain.Package import AnalyzeSpectra`
@@ -31,19 +31,19 @@ Importing this package is pretty simple. Follow these steps:
 
 ## Issues
 
-If you are having issue pip installing manually, please run the `setup.bat` file by opening up your command prompt and typing `setup.bat` (NOTE: You will need to download this manually and run in in the folder where your main code is located)
+If you are having issues with `pip` installing manually, please run the `setup.bat` file by opening up your command prompt and typing `setup.bat` (NOTE: You will need to download this manually and run it in the folder where your main code is located)
 
 ## Example
 
-Please see main.py ([link](https://github.com/kconfeiteiro/EP-425-Final-Project-Code/blob/main/main.py)) for the full example.
+Please see [`main.py`](https://github.com/kconfeiteiro/EP-425-Final-Project-Code/blob/main/main.py) for the full example.
 
 ### Code
 
-```python
+```py
 from ProjectMain.Package import AnalyzeSpectra
 import os
 
-# define root folder and indvidual files you want to plot (separetely)
+# define the root folder and individual files you want to plot (separately)
 file = 'HD12871704_15_23_850_20230415064551_47.fit'
 root = 'DATA/HD12871704_15_23_850_-1_20230415T064551/'
 path = os.path.join(root, file) # creates a combined path
@@ -62,15 +62,15 @@ Data.plot_full_spectra(print=True) # plots entire combined spectra
 
 ## Software
 
-* Demetra (calibration and reduction)
-* Python (analysis)
+* [Demetra](https://www.shelyak.com/software/demetra/?lang=en)
+* [Python](https://docs.python.org/3/library/) 
 
 ## Packages used
 
-* `SciPy`
-* `Numpy`
-* `MatPlotLib`
-* `OS`
+* `scipy`
+* `numpy`
+* `matplotlib`
+* `os`
 
 # Citations
 
@@ -82,8 +82,8 @@ Latest Major Release (v5.0) of the Core Package. apj, 935(2):167, August 2022
 
 ## Test Data
 
-I would like to thank Antonion Cascio and Evan Bryson for donating their data to allow me to test the code. 
+Thank Antonio Cascio and Evan Bryson for sharing their data to allow me to test the code. 
 
 # Issues
 
-If you have any issues with the code, please email me at [confeitk@my.erau](mailto:confeitk@my.erau.edu).
+If you have any issues with the code, please email me at [confeitk@my.erau.edu](mailto:confeitk@my.erau.edu).
