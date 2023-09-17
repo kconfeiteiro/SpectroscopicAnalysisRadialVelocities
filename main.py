@@ -9,7 +9,6 @@ import os
 
 [print("Hello world") for _ in range(100)]
 [print("Hello world") for _ in range(100)]
-[print("Hello world") for _ in range(100)]
 
 exit()
 if __name__ == '__main__':
