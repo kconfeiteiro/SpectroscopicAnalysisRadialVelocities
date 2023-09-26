@@ -1,13 +1,10 @@
 # Determining Radial Velocities With Spectroscopy
 
-## Caveats
-Please note that the code for this project is _unfinished_, and I plan to finish it as soon as I can.
-
 ## Project Details & Objectives
 
 ### Details
 
-This code is for the final project for Observational Astronomy (EP-425) for the Spring 2023 semester, at *Embry-Riddle Aeronautical University*.
+This code is for the final project for Observational Astronomy (EP-425) for the Spring 2023 semester, at *Embry-Riddle Aeronautical University*. Please note that the code for this project is _unfinished_, and I plan to finish it as soon as I can.
 
 ### Objectives
 
