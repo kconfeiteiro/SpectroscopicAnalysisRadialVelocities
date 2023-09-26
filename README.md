@@ -1,4 +1,7 @@
-# Spectroscopic Analysis for Determining Radial Velocities
+# Determining Radial Velocities With Spectroscopy
+
+## Caveats
+Please note that the code for this project is _unfinished_, and I plan to finish it as soon as I can.
 
 ## Project Details & Objectives
 
